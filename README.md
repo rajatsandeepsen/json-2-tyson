@@ -106,5 +106,8 @@ Please check out the [official json-schema specs](https://json-schema.org/specif
 ## Inspirations
 
 - [json-schema-to-ts](https://github.com/ThomasAribart/json-schema-to-ts)
+- [json-schema-to-ts](https://github.com/ThomasAribart/json-schema-to-ts)
 - [json-schema-to-typescript](https://github.com/bcherny/json-schema-to-typescript)
 - [typescript-json-schema](https://github.com/YousefED/typescript-json-schema)
+- [zod-to-ts](https://github.com/sachinraja/zod-to-ts)
+- [zod.fromJSONSchema()](https://zod.dev/json-schema)

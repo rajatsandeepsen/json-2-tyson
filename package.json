@@ -10,9 +10,10 @@
 		"./schema.json"
 	],
 	"scripts": {
+		"prepublishOnly": "bun run build",
 		"build": "tsdown",
 		"build:watch": "tsdown --watch",
-		"type-check": "tsc --noEmit"
+		"check": "tsc --noEmit"
 	},
 	"exports": {
 		"./package.json": "./package.json",
@@ -28,12 +29,9 @@
 		"@types/node": "20.17.24",
 		"biome-md": "^0.0.6",
 		"tsdown": "^0.15.10",
-		"typescript": "5.6.3",
-		"zod": "^3.25.67"
+		"typescript": "5.6.3"
 	},
-	"peerDependencies": {
-		"zod": "^3.0.0"
-	},
+	"peerDependencies": {},
 	"engines": {
 		"node": ">=18"
 	},
