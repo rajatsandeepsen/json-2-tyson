@@ -15,7 +15,9 @@ type SchemaNode = {
 
 type ToolFunction = {
 	name?: string;
+	async?: boolean;
 	parameters?: unknown;
+	returns?: unknown;
 	required?: string[];
 	additionalProperties?: boolean | unknown;
 };
@@ -172,6 +174,7 @@ export function getTool(
 	options: {
 		name?: string;
 		export?: boolean;
+		async?: boolean;
 	} = {},
 ) {
 	if (!isObjectLike(input)) {
@@ -206,8 +209,21 @@ export function getTool(
 		fields.push(`[key: string]: ${valueType}`);
 	}
 
-	const paramsType = `{ ${fields.join(", ")} }`;
-	const exportPrefix = options.export === false ? "" : "export ";
+	const parameterType = `{ ${fields.join(", ")} }`;
 
-	return `${exportPrefix}type ${name} = (params: ${paramsType}) => void`;
+	const async = options.async ?? toolFunction.async ?? false;
+	const baseReturnType = toolFunction.returns
+		? schemaToTs(toolFunction.returns)
+		: "void";
+	const returnType = async ? `Promise<${baseReturnType}>` : baseReturnType;
+
+	const exportPrefix = options.export ? "export type" : "type";
+
+	return {
+		code: `${exportPrefix} ${name} = (params: ${parameterType}) => ${returnType}`,
+		name,
+		async,
+		parameterType,
+		returnType: baseReturnType,
+	};
 }

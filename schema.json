@@ -83,10 +83,17 @@
 					"minLength": 1,
 					"pattern": "^[A-Za-z_][A-Za-z0-9_-]*$"
 				},
+				"async": {
+					"type": "boolean"
+				},
 				"description": { "type": "string" },
 				"parameters": {
 					"type": "object",
 					"additionalProperties": { "$ref": "#/$defs/schemaNode" }
+				},
+				"returns": {
+					"type": "object",
+					"$ref": "#/$defs/schemaNode"
 				},
 				"additionalProperties": {
 					"type": "boolean"
