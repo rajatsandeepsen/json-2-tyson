@@ -1,6 +1,6 @@
 {
-	"name": "package",
-	"description": "Template for building packages",
+	"name": "typeschema",
+	"description": "Turn your JSON Schema to TypeScript",
 	"version": "0.0.1",
 	"main": "./dist/index.js",
 	"module": "./dist/index.mjs",
@@ -48,10 +48,15 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/rajatsandeepsen/package.git"
+		"url": "git+https://github.com/rajatsandeepsen/typeschema.git"
 	},
 	"bugs": {
-		"url": "https://github.com/rajatsandeepsen/package/issues"
+		"url": "https://github.com/rajatsandeepsen/typeschema/issues"
 	},
-	"keywords": []
+	"keywords": [
+		"typeschema",
+		"typescript",
+		"json",
+		"jsonschema"
+	]
 }

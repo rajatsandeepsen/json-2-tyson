@@ -1,15 +1,17 @@
-<a href="https://github.com/rajatsandeepsen/package">
-    <img alt="cover" src="https://github.com/rajatsandeepsen/package/blob/main/cover.png?raw=true" />
+<a href="https://github.com/rajatsandeepsen/typeschema">
+    <img alt="cover" src="https://github.com/rajatsandeepsen/typeschema/blob/main/cover.png?raw=true" />
 </a>
 
-# Package
+# TypeSchema
+
+Turn your JSON Schema to TypeScript
 
 ## Setup
 
 You can install the package using npm, bun, nubs or pnpm
 
 ```bash
-npm i package
+npm i typeschema
 ```
 
 ## Documentation
