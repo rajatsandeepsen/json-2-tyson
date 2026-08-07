@@ -4,7 +4,16 @@
 
 # TypeSchema
 
-Turn your JSON Schema to TypeScript
+Turn your JSON schema into TypeScript code.
+
+### Work in Progress
+
+- [x] Simple & Fast
+- [x] Support functions & tools
+- [x] Customizable options
+- [ ] Nested tools
+- [ ] Support `$defs`, `$ref`, `pattern`, `$id`, `$schema`, `minProperties`, `maxProperties`
+- [ ] Support comments & examples
 
 ## Setup
 
@@ -14,6 +23,88 @@ You can install the package using npm, bun, nubs or pnpm
 npm i typeschema
 ```
 
+### Schema
+
+```ts
+import { TypeSchema } from "typeschema";
+
+const schema = {
+	title: "user",
+	type: "object",
+	properties: {
+		id: {
+			type: "string",
+		},
+		name: {
+			type: "string",
+		},
+	},
+	required: ["id"],
+};
+
+const out = TypeSchema(schema, {
+	export: true,
+	declaration: "type",
+});
+
+console.log(out.code);
+```
+
+```ts
+export type User = {
+	id: string;
+	name?: string;
+};
+```
+
+### Tools
+
+```ts
+import { TypeSchemaTool } from "typeschema";
+
+const tool = {
+	type: "function",
+	function: {
+		name: "get_weather",
+		description: "get weather",
+		async: true,
+		parameters: {
+			city: {
+				type: "string",
+			},
+			unit: {
+				type: "string",
+				enum: ["celsius", "fahrenheit"],
+			},
+		},
+		returns: {
+			type: "number",
+		},
+		required: ["city"],
+		additionalProperties: false,
+	},
+};
+
+const out = TypeSchemaTool(tool, {
+	export: true,
+});
+
+console.log(out.code);
+```
+
+```ts
+export type get_weather = (params: {
+	city: string;
+	unit?: "celsius" | "fahrenheit";
+}) => Promise<number>;
+```
+
 ## Documentation
 
-Please check out the [docs]() and [docs]() for more information.
+Please check out the [official json-schema specs](https://json-schema.org/specification) for more information.
+
+## Inspirations
+
+- [json-schema-to-ts](https://github.com/ThomasAribart/json-schema-to-ts)
+- [json-schema-to-typescript](https://github.com/bcherny/json-schema-to-typescript)
+- [typescript-json-schema](https://github.com/YousefED/typescript-json-schema)

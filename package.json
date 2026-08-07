@@ -1,12 +1,13 @@
 {
 	"name": "typeschema",
-	"description": "Turn your JSON Schema to TypeScript",
+	"description": "Turn your JSON schema into TypeScript code",
 	"version": "0.0.1",
 	"main": "./dist/index.js",
 	"module": "./dist/index.mjs",
 	"types": "./dist/index.d.ts",
 	"files": [
-		"dist/**/*"
+		"dist/**/*",
+		"./schema.json"
 	],
 	"scripts": {
 		"build": "tsdown",
@@ -19,9 +20,6 @@
 			"types": "./dist/index.d.ts",
 			"import": "./dist/index.mjs",
 			"require": "./dist/index.js"
-		},
-		"./type": {
-			"types": "./dist/type.d.ts"
 		}
 	},
 	"dependencies": {},
@@ -54,6 +52,8 @@
 		"url": "https://github.com/rajatsandeepsen/typeschema/issues"
 	},
 	"keywords": [
+		"type",
+		"schema",
 		"typeschema",
 		"typescript",
 		"json",

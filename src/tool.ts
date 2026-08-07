@@ -169,7 +169,7 @@ function extractParametersShape(toolFunction: ToolFunction) {
 	};
 }
 
-export function getTool(
+export function TypeSchemaTool(
 	input: ToolInput,
 	options: {
 		name?: string;
