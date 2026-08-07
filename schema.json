@@ -1,8 +1,8 @@
 {
 	"$schema": "https://json-schema.org/draft/2020-12/schema",
 	"$id": "https://rajatsandeepsen.github.io/typeschema/schema.json",
-	"title": "TypeSchema",
-	"description": "Schema for the custom schema format shown in example/schema.json.",
+	"title": "JSON Schema with Tools",
+	"description": "Simplest JSON schema with support for latest LLM tool calling",
 	"$ref": "#/$defs/schemaNode",
 	"$defs": {
 		"jsonType": {
@@ -85,7 +85,8 @@
 				},
 				"description": { "type": "string" },
 				"parameters": {
-					"type": "object"
+					"type": "object",
+					"additionalProperties": { "$ref": "#/$defs/schemaNode" }
 				},
 				"additionalProperties": {
 					"type": "boolean"
