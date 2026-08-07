@@ -1,5 +1,5 @@
 {
-	"name": "typeschema",
+	"name": "types-schema",
 	"description": "Turn your JSON schema into TypeScript code",
 	"version": "0.0.1",
 	"main": "./dist/index.js",
@@ -44,10 +44,10 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/rajatsandeepsen/typeschema.git"
+		"url": "git+https://github.com/rajatsandeepsen/types-schema.git"
 	},
 	"bugs": {
-		"url": "https://github.com/rajatsandeepsen/typeschema/issues"
+		"url": "https://github.com/rajatsandeepsen/types-schema/issues"
 	},
 	"keywords": [
 		"type",

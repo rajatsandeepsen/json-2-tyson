@@ -1,8 +1,8 @@
-<a href="https://github.com/rajatsandeepsen/typeschema">
-    <img alt="cover" src="https://github.com/rajatsandeepsen/typeschema/blob/main/cover.png?raw=true" />
+<a href="https://github.com/rajatsandeepsen/types-schema">
+    <img alt="cover" src="https://github.com/rajatsandeepsen/types-schema/blob/main/cover.png?raw=true" />
 </a>
 
-# TypeSchema
+# Types-Schema
 
 Turn your JSON schema into TypeScript code.
 
@@ -20,13 +20,13 @@ Turn your JSON schema into TypeScript code.
 You can install the package using npm, bun, nubs or pnpm
 
 ```bash
-npm i typeschema
+npm i types-schema
 ```
 
 ### Schema
 
 ```ts
-import { TypeSchema } from "typeschema";
+import { getTypesSchema } from "types-schema"
 
 const schema = {
 	title: "user",
@@ -42,7 +42,7 @@ const schema = {
 	required: ["id"],
 };
 
-const out = TypeSchema(schema, {
+const out = getTypesSchema(schema, {
 	export: true,
 	declaration: "type",
 });
@@ -60,7 +60,7 @@ export type User = {
 ### Tools
 
 ```ts
-import { TypeSchemaTool } from "typeschema";
+import { getToolSchema } from "types-schema"
 
 const tool = {
 	type: "function",
@@ -85,7 +85,7 @@ const tool = {
 	},
 };
 
-const out = TypeSchemaTool(tool, {
+const out = getToolSchema(tool, {
 	export: true,
 });
 

@@ -134,7 +134,7 @@ ${lines.join("\n")}
 	return "unknown";
 }
 
-export function TypeSchema(schema: JsonSchema, options: Options = {}) {
+export function getTypesSchema(schema: JsonSchema, options: Options = {}) {
 	if (!isObjectLike(schema) || !schema)
 		throw new Error("Invalid schema input: missing object");
 
