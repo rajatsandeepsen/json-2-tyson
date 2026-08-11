@@ -1,21 +1,13 @@
 import { z } from "zod";
 import { schemaToType } from "./core";
-import { BaseSchemaNodeZod } from "./type";
-import { formatObjectFields } from "./utils";
+import { BaseSchemaNodeZod, propertyKeys } from "./type";
+import { formatObjectFields, getComment, toTypeName } from "./utils";
 
 const ToolFunctionZod = z.object({
-	name: z
-		.string()
-		.transform((n) => n.replace(/[^A-Za-z0-9_$]/g, "_"))
-		.refine((n) => /^[A-Za-z_$]/.test(n)),
+	name: z.string().default("Tool"),
 	description: z.string().trim().optional(),
 	async: z.boolean().default(false),
-	parameters: z
-		.record(
-			z.string().refine((k) => /^[A-Za-z_$][A-Za-z0-9_$]*$/.test(k)),
-			BaseSchemaNodeZod,
-		)
-		.default({}),
+	parameters: z.record(propertyKeys, BaseSchemaNodeZod).default({}),
 	returns: BaseSchemaNodeZod.optional(),
 	required: z.array(z.string()).default([]),
 	additionalProperties: z.boolean().default(false),
@@ -26,7 +18,7 @@ const ToolSchemaZod = z.object({
 	function: ToolFunctionZod,
 });
 
-export type ToolSchema = z.infer<typeof ToolSchemaZod>;
+export type ToolSchema = z.input<typeof ToolSchemaZod>;
 
 export function getToolSchema(
 	input: Partial<ToolSchema>,
@@ -41,7 +33,7 @@ export function getToolSchema(
 ) {
 	const {
 		function: {
-			name,
+			name: defaultName,
 			parameters,
 			async,
 			returns,
@@ -51,6 +43,7 @@ export function getToolSchema(
 		},
 	} = ToolSchemaZod.parse(input);
 
+	const name = toTypeName(options.name ?? defaultName);
 	const requiredSet = new Set(required);
 
 	const fields: string[] = Object.entries(parameters).map(([key, value]) => {
@@ -80,7 +73,7 @@ export function getToolSchema(
 
 	const exportPrefix = options.export ? "export type" : "type";
 
-	const comment = options.comment && description ? `// ${description}\n` : "";
+	const comment = options.comment ? getComment(description, "\n") : "";
 
 	const code = `${comment}${exportPrefix} ${name} = (params: ${parameterType}) => ${returnType}`;
 

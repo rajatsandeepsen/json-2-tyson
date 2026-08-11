@@ -7,10 +7,14 @@ export const JsonValueZod = z.union([
 	z.null(),
 ]);
 
+export const propertyKeys = z
+	.string()
+	.transform((n) => (/^[A-Za-z_$][A-Za-z0-9_$]*$/.test(n) ? n : `"${n}"`));
+
 export const BaseSchemaNodeZod = z.object({
 	description: z.string().optional(),
 	type: z.union([z.string(), z.array(z.string())]),
-	required: z.array(z.string()).optional(),
+	required: z.array(z.string()).default([]),
 	enum: z.array(JsonValueZod).optional(),
 	const: JsonValueZod.optional(),
 	properties: z.record(z.string(), z.unknown()).optional(),
@@ -21,6 +25,6 @@ export const BaseSchemaNodeZod = z.object({
 	allOf: z.array(z.unknown()).optional(),
 });
 
-export type JsonValue = z.infer<typeof JsonValueZod>;
+export type JsonValue = z.input<typeof JsonValueZod>;
 
-export type BaseSchemaNode = z.infer<typeof BaseSchemaNodeZod>;
+export type BaseSchemaNode = z.input<typeof BaseSchemaNodeZod>;

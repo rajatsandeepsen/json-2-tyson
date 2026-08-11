@@ -1,26 +1,27 @@
+import { z } from "zod";
 import { schemaToType } from "./core";
-import type { BaseSchemaNode } from "./type";
-import { isObjectLike, toTypeName } from "./utils";
+import { BaseSchemaNodeZod } from "./type";
+import { getComment, toTypeName } from "./utils";
 
-export type JsonSchema = BaseSchemaNode & {
-	title?: string;
-};
+const JsonSchemaZod = BaseSchemaNodeZod.extend({
+	title: z.string().default("Data"),
+});
+
+export type JsonSchema = z.input<typeof JsonSchemaZod>;
 
 type Options = {
-	objectStyle?: "inline" | "multiline";
 	name?: string;
 	export?: boolean;
+	comment?: boolean;
 	declaration?: "type" | "interface";
+	objectStyle?: "inline" | "multiline";
 };
 
-export function getTypesSchema(schema: JsonSchema, options: Options = {}) {
-	if (!isObjectLike(schema) || !schema)
-		throw new Error("Invalid schema input: missing object");
+export function getTypesSchema(data: JsonSchema, options: Options = {}) {
+	const { title, description, ...schema } = JsonSchemaZod.parse(data);
 
-	const schemaTitle =
-		typeof schema.title === "string" ? schema.title : "GeneratedType";
+	const typeName = toTypeName(options.name ?? title);
 
-	const typeName = toTypeName(options.name ?? schemaTitle);
 	const body = schemaToType(schema, {
 		objectStyle: options.objectStyle,
 		filterProperty: (k) => k !== "tools",
@@ -29,12 +30,14 @@ export function getTypesSchema(schema: JsonSchema, options: Options = {}) {
 	const exportPrefix = options.export ? "export " : "";
 	const canUseInterface = declaration === "interface" && body.startsWith("{");
 
+	const comment = options.comment ? getComment(description, "\n") : "";
+
 	return {
 		name: typeName,
 		type: body,
 		declaration: canUseInterface ? ("interface" as const) : ("type" as const),
 		code: canUseInterface
-			? (`${exportPrefix}interface ${typeName} ${body}` as const)
-			: (`${exportPrefix}type ${typeName} = ${body}` as const),
+			? `${comment}${exportPrefix}interface ${typeName} ${body}`
+			: `${comment}${exportPrefix}type ${typeName} = ${body}`,
 	};
 }

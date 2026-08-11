@@ -1,28 +1,22 @@
-import type { BaseSchemaNode } from "./type";
+import { z } from "zod";
+import { BaseSchemaNodeZod } from "./type";
 import {
 	escapePropertyName,
-	isObjectLike,
+	formatObjectFields,
 	literal,
 	primitiveTypeMap,
 } from "./utils";
 
-type SchemaToTypeOptions = {
+const SchemaNodeZod = BaseSchemaNodeZod.extend({
+	properties: z.record(z.string(), z.unknown()).optional(),
+});
+
+export type SchemaToTypeOptions = {
 	objectStyle?: "inline" | "multiline";
 	filterProperty?: (key: string) => boolean;
 };
 
-export function formatObjectFields(
-	fields: string[],
-	objectStyle: "inline" | "multiline",
-) {
-	if (objectStyle === "multiline") {
-		return `{
-${fields.map((field) => `  ${field}`).join(",\n")}
-}`;
-	}
-
-	return `{ ${fields.join(", ")} }`;
-}
+export { formatObjectFields } from "./utils";
 
 export function schemaToType(
 	schema: unknown,
@@ -38,11 +32,12 @@ export function schemaToType(
 			return `(${elementTypes.join(" | ")})[]`;
 		}
 
-		if (!isObjectLike(node)) {
+		const parsed = SchemaNodeZod.safeParse(node);
+		if (!parsed.success) {
 			return "unknown";
 		}
 
-		const s = node as BaseSchemaNode;
+		const s = parsed.data;
 
 		if (s.const !== undefined) {
 			return literal(s.const);
@@ -80,10 +75,10 @@ export function schemaToType(
 		}
 
 		if (s.type === "object" || s.properties !== undefined) {
-			const properties = isObjectLike(s.properties) ? s.properties : {};
-			const required = new Set(Array.isArray(s.required) ? s.required : []);
+			const properties = s.properties ?? {};
+			const required = new Set(s.required);
 
-			const fields = Object.entries(properties as object)
+			const fields = Object.entries(properties)
 				.filter(([key]) => filterProperty(key))
 				.map(([key, value]) => {
 					const optional = required.has(key) ? "" : "?";
