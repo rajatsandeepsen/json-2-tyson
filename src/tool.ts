@@ -1,65 +1,32 @@
+import { z } from "zod";
 import { schemaToType } from "./core";
-import type { BaseSchemaNode } from "./type";
-import {
-	escapePropertyName,
-	formatObjectFields,
-	isObjectLike,
-	toToolName,
-} from "./utils";
+import { BaseSchemaNodeZod } from "./type";
+import { formatObjectFields } from "./utils";
 
-type SchemaNode = BaseSchemaNode;
+const ToolFunctionZod = z.object({
+	name: z
+		.string()
+		.transform((n) => n.replace(/[^A-Za-z0-9_$]/g, "_"))
+		.refine((n) => /^[A-Za-z_$]/.test(n)),
+	description: z.string().trim().optional(),
+	async: z.boolean().default(false),
+	parameters: z
+		.record(
+			z.string().refine((k) => /^[A-Za-z_$][A-Za-z0-9_$]*$/.test(k)),
+			BaseSchemaNodeZod,
+		)
+		.default({}),
+	returns: BaseSchemaNodeZod.optional(),
+	required: z.array(z.string()).default([]),
+	additionalProperties: z.boolean().default(false),
+});
 
-type ToolFunction = {
-	name?: string;
-	description?: string;
-	async?: boolean;
-	parameters?: unknown;
-	returns?: unknown;
-	required?: string[];
-	additionalProperties?: boolean | unknown;
-};
+const ToolSchemaZod = z.object({
+	type: z.literal("function"),
+	function: ToolFunctionZod,
+});
 
-export type ToolSchema = {
-	type: string;
-	function: ToolFunction;
-};
-
-function extractParametersShape(toolFunction: ToolFunction) {
-	const raw = toolFunction.parameters;
-
-	if (!isObjectLike(raw)) {
-		return {
-			properties: {} as Record<string, unknown>,
-			required: new Set<string>(),
-			additionalProperties: false as boolean | unknown,
-		};
-	}
-
-	const asSchema = raw as SchemaNode;
-
-	if (asSchema.type === "object" || asSchema.properties !== undefined) {
-		return {
-			properties: isObjectLike(asSchema.properties)
-				? asSchema.properties
-				: ({} as Record<string, unknown>),
-			required: new Set(
-				Array.isArray(asSchema.required) ? asSchema.required : [],
-			),
-			additionalProperties:
-				asSchema.additionalProperties ??
-				toolFunction.additionalProperties ??
-				false,
-		};
-	}
-
-	return {
-		properties: raw as Record<string, unknown>,
-		required: new Set(
-			Array.isArray(toolFunction.required) ? toolFunction.required : [],
-		),
-		additionalProperties: toolFunction.additionalProperties ?? false,
-	};
-}
+export type ToolSchema = z.infer<typeof ToolSchemaZod>;
 
 export function getToolSchema(
 	input: Partial<ToolSchema>,
@@ -72,42 +39,31 @@ export function getToolSchema(
 		returnStyle?: "inline" | "multiline";
 	} = {},
 ) {
-	if (!isObjectLike(input)) {
-		throw new Error("Invalid tool input: expected an object");
-	}
-
-	const toolFunction = input.function;
-
-	if (!isObjectLike(toolFunction) || !toolFunction) {
-		throw new Error("Invalid tool input: missing function object");
-	}
-
-	const schemaName =
-		typeof toolFunction.name === "string" ? toolFunction.name : "tool";
-	const name = toToolName(options.name ?? schemaName);
-
-	const { properties, required, additionalProperties } =
-		extractParametersShape(toolFunction);
-
-	const fields: string[] = Object.entries(properties as object).map(
-		([key, value]) => {
-			const optional = required.has(key) ? "" : "?";
-			const keyType = `${escapePropertyName(key)}${optional}`;
-			const valueType = schemaToType(value, {
-				objectStyle: options.paramStyle,
-			});
-			return `${keyType}: ${valueType}`;
+	const {
+		function: {
+			name,
+			parameters,
+			async,
+			returns,
+			description,
+			additionalProperties,
+			required,
 		},
-	);
+	} = ToolSchemaZod.parse(input);
 
-	if (additionalProperties && additionalProperties !== false) {
-		const valueType =
-			additionalProperties === true
-				? "unknown"
-				: schemaToType(additionalProperties, {
-						objectStyle: options.paramStyle,
-					});
-		fields.push(`[key: string]: ${valueType}`);
+	const requiredSet = new Set(required);
+
+	const fields: string[] = Object.entries(parameters).map(([key, value]) => {
+		const optional = requiredSet.has(key) ? "" : "?";
+		const keyType = `${key}${optional}`;
+		const valueType = schemaToType(value, {
+			objectStyle: options.paramStyle,
+		});
+		return `${keyType}: ${valueType}`;
+	});
+
+	if (additionalProperties) {
+		fields.push(`[key: string]: unknown`);
 	}
 
 	const parameterType = formatObjectFields(
@@ -115,23 +71,21 @@ export function getToolSchema(
 		options.paramStyle ?? "inline",
 	);
 
-	const async = options.async ?? toolFunction.async ?? false;
-	const baseReturnType = toolFunction.returns
-		? schemaToType(toolFunction.returns, { objectStyle: options.returnStyle })
+	const baseReturnType = returns
+		? schemaToType(returns, { objectStyle: options.returnStyle })
 		: "void";
-	const returnType = async ? `Promise<${baseReturnType}>` : baseReturnType;
+
+	const returnType =
+		options.async || async ? `Promise<${baseReturnType}>` : baseReturnType;
 
 	const exportPrefix = options.export ? "export type" : "type";
 
-	const comment =
-		options.comment &&
-		typeof toolFunction.description === "string" &&
-		toolFunction.description.trim().length
-			? `// ${toolFunction.description}\n`
-			: "";
+	const comment = options.comment && description ? `// ${description}\n` : "";
+
+	const code = `${comment}${exportPrefix} ${name} = (params: ${parameterType}) => ${returnType}`;
 
 	return {
-		code: `${comment}${exportPrefix} ${name} = (params: ${parameterType}) => ${returnType}`,
+		code,
 		name,
 		async,
 		parameterType,

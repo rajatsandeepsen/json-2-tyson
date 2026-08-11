@@ -1,15 +1,26 @@
-export type JsonValue = string | number | boolean | null;
+import { z } from "zod";
 
-export type BaseSchemaNode = {
-	description?: string;
-	type?: string | string[];
-	enum?: JsonValue[];
-	const?: JsonValue;
-	properties?: Record<string, unknown>;
-	required?: string[];
-	items?: unknown;
-	additionalProperties?: boolean | unknown;
-	oneOf?: unknown[];
-	anyOf?: unknown[];
-	allOf?: unknown[];
-};
+export const JsonValueZod = z.union([
+	z.string(),
+	z.number(),
+	z.boolean(),
+	z.null(),
+]);
+
+export const BaseSchemaNodeZod = z.object({
+	description: z.string().optional(),
+	type: z.union([z.string(), z.array(z.string())]),
+	required: z.array(z.string()).optional(),
+	enum: z.array(JsonValueZod).optional(),
+	const: JsonValueZod.optional(),
+	properties: z.record(z.string(), z.unknown()).optional(),
+	items: z.unknown().optional(),
+	additionalProperties: z.unknown().optional(),
+	oneOf: z.array(z.unknown()).optional(),
+	anyOf: z.array(z.unknown()).optional(),
+	allOf: z.array(z.unknown()).optional(),
+});
+
+export type JsonValue = z.infer<typeof JsonValueZod>;
+
+export type BaseSchemaNode = z.infer<typeof BaseSchemaNodeZod>;
