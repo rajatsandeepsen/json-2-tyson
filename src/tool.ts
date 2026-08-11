@@ -1,11 +1,17 @@
-import { formatObjectFields, schemaToType } from "./core";
+import { schemaToType } from "./core";
 import type { BaseSchemaNode } from "./type";
-import { escapePropertyName, isObjectLike, toToolName } from "./utils";
+import {
+	escapePropertyName,
+	formatObjectFields,
+	isObjectLike,
+	toToolName,
+} from "./utils";
 
 type SchemaNode = BaseSchemaNode;
 
 type ToolFunction = {
 	name?: string;
+	description?: string;
 	async?: boolean;
 	parameters?: unknown;
 	returns?: unknown;
@@ -61,6 +67,7 @@ export function getToolSchema(
 		name?: string;
 		export?: boolean;
 		async?: boolean;
+		comment?: boolean;
 		paramStyle?: "inline" | "multiline";
 		returnStyle?: "inline" | "multiline";
 	} = {},
@@ -116,11 +123,19 @@ export function getToolSchema(
 
 	const exportPrefix = options.export ? "export type" : "type";
 
+	const comment =
+		options.comment &&
+		typeof toolFunction.description === "string" &&
+		toolFunction.description.trim().length
+			? `// ${toolFunction.description}\n`
+			: "";
+
 	return {
-		code: `${exportPrefix} ${name} = (params: ${parameterType}) => ${returnType}`,
+		code: `${comment}${exportPrefix} ${name} = (params: ${parameterType}) => ${returnType}`,
 		name,
 		async,
 		parameterType,
 		returnType: baseReturnType,
+		comment,
 	};
 }

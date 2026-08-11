@@ -34,3 +34,16 @@ export function toToolName(name: string) {
 	if (/^[A-Za-z_$]/.test(normalized)) return normalized;
 	return `_${normalized || "tool"}`;
 }
+
+export function formatObjectFields(
+	fields: string[],
+	objectStyle: "inline" | "multiline",
+) {
+	if (objectStyle === "multiline") {
+		if (fields.length === 0) return "{ }";
+
+		return `{\n${fields.map((field) => `  ${field}`).join(",\n")}\n}`;
+	}
+
+	return `{ ${fields.join(", ")} }`;
+}

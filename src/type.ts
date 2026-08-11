@@ -1,6 +1,7 @@
 export type JsonValue = string | number | boolean | null;
 
 export type BaseSchemaNode = {
+	description?: string;
 	type?: string | string[];
 	enum?: JsonValue[];
 	const?: JsonValue;
