@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { schemaToType } from "./core";
 import { BaseSchemaNodeZod, propertyKeys } from "./type";
-import { formatObjectFields, getComment, toTypeName } from "./utils";
+import { fixKey, formatObjectFields, getComment, toTypeName } from "./utils";
 
 const ToolFunctionZod = z.object({
 	name: z.string().default("Tool"),
@@ -47,7 +47,9 @@ export function getToolSchema(
 	const requiredSet = new Set(required);
 
 	const fields: string[] = Object.entries(parameters).map(([key, value]) => {
-		const optional = requiredSet.has(key) ? "" : "?";
+		const searchKey = fixKey(key);
+		const optional = requiredSet.has(searchKey) ? "" : "?";
+
 		const keyType = `${key}${optional}`;
 		const valueType = schemaToType(value, {
 			objectStyle: options.paramStyle,

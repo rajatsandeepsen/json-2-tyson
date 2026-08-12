@@ -14,6 +14,10 @@ export function isObjectLike(value: unknown) {
 	return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
+export function fixKey(name: string) {
+	return name.replaceAll('"', "");
+}
+
 export function escapePropertyName(name: string) {
 	return propertyKeys.parse(name);
 }
