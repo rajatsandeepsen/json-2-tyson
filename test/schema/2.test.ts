@@ -32,13 +32,19 @@ export interface user_profile {
   [key: string]: number
 }`;
 
+const estimatedTime = 2;
+
 test("generates interface schema with escaped keys and index signature", () => {
+	const __start = Date.now();
 	const out = getTypesSchema(schema, {
 		export: true,
 		comment: true,
 		declaration: "interface",
 		objectStyle: "multiline",
 	});
+	const diff = Date.now() - __start;
+	console.log(`time: ${diff}ms`);
+	assert.ok(diff <= estimatedTime);
 
 	assert.equal(out.code, expected);
 	assert.equal(out.declaration, "interface");

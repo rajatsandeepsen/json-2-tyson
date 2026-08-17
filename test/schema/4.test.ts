@@ -23,13 +23,19 @@ const expected = `export type agent = {
   name: string
 }`;
 
+const estimatedTime = 1;
+
 test("filters reserved tools property from generated schema", () => {
+	const __start = Date.now();
 	const out = getTypesSchema(schema, {
 		export: true,
 		comment: false,
 		declaration: "type",
 		objectStyle: "multiline",
 	});
+	const diff = Date.now() - __start;
+	console.log(`time: ${diff}ms`);
+	assert.ok(diff <= estimatedTime);
 
 	assert.equal(out.code, expected);
 	assert.equal(out.declaration, "type");

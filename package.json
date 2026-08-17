@@ -12,6 +12,7 @@
 	"scripts": {
 		"prepublishOnly": "bun run build",
 		"build": "tsdown",
+		"pack": "bun run build && bun pm pack --filename package.tgz",
 		"build:watch": "tsdown --watch",
 		"test": "bun test",
 		"check": "tsc --noEmit"

@@ -30,7 +30,10 @@ const tool: ToolSchema = {
 const expected = `// Emit event
 type send_event = (params: { "event-name": string, payload?: { count: number }, [key: string]: unknown }) => void`;
 
+const estimatedTime = 1;
+
 test("generates inline sync tool schema with additional properties", () => {
+	const __start = Date.now();
 	const out = getToolSchema(tool, {
 		paramStyle: "inline",
 		returnStyle: "inline",
@@ -38,6 +41,9 @@ test("generates inline sync tool schema with additional properties", () => {
 		comment: true,
 		async: false,
 	});
+	const diff = Date.now() - __start;
+	console.log(`time: ${diff}ms`);
+	assert.ok(diff <= estimatedTime);
 
 	assert.equal(out.name, "send_event");
 	assert.equal(out.comment, "// Emit event\n");
