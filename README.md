@@ -1,8 +1,8 @@
-<a href="https://github.com/rajatsandeepsen/types-schema">
-    <img alt="cover" src="https://github.com/rajatsandeepsen/types-schema/blob/main/cover.png?raw=true" />
+<a href="https://github.com/rajatsandeepsen/tyson-schema">
+    <img alt="cover" src="https://github.com/rajatsandeepsen/tyson-schema/blob/main/cover.png?raw=true" />
 </a>
 
-# Types-Schema
+# Tyson-Schema
 
 Turn your JSON schema into TypeScript code.
 
@@ -11,22 +11,23 @@ Turn your JSON schema into TypeScript code.
 - [x] Simple & Fast
 - [x] Support functions & tools
 - [x] Customizable options
+- [x] Support comments
 - [ ] Nested tools
 - [ ] Support `$defs`, `$ref`, `pattern`, `$id`, `$schema`, `minProperties`, `maxProperties`
-- [ ] Support comments & examples
+- [ ] Support examples
 
 ## Setup
 
 You can install the package using npm, bun, nubs or pnpm
 
 ```bash
-npm i types-schema
+npm i tyson-schema
 ```
 
 ### Schema
 
 ```ts
-import { getTypesSchema } from "types-schema"
+import { getTypesSchema } from "tyson-schema"
 
 const schema = {
 	title: "user",
@@ -60,7 +61,7 @@ export type User = {
 ### Tools
 
 ```ts
-import { getToolSchema } from "types-schema"
+import { getToolSchema } from "tyson-schema"
 
 const tool = {
 	type: "function",
@@ -105,6 +106,7 @@ Please check out the [official json-schema specs](https://json-schema.org/specif
 
 ## Inspirations
 
+- [tool-schema](https://github.com/slegarraga/tool-schema)
 - [json-schema-to-ts](https://github.com/ThomasAribart/json-schema-to-ts)
 - [json-schema-to-ts](https://github.com/ThomasAribart/json-schema-to-ts)
 - [json-schema-to-typescript](https://github.com/bcherny/json-schema-to-typescript)

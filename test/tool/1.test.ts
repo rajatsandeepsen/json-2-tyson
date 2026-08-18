@@ -1,6 +1,6 @@
 import { strict as assert } from "node:assert";
 import test from "node:test";
-import { getToolSchema, type ToolSchema } from "types-schema";
+import { getToolSchema, type ToolSchema } from "tyson-schema";
 
 const tool: ToolSchema = {
 	type: "function",
@@ -20,7 +20,7 @@ const tool: ToolSchema = {
 			},
 		},
 		returns: {
-			type: "number"
+			type: "number",
 		},
 		required: ["city"],
 		additionalProperties: false,
@@ -31,7 +31,7 @@ const expected = `// Tool to get weather
 export type WeatherSchema = (params: {
   city: string,
   unit?: "celsius" | "fahrenheit"
-}) => Promise<number>`
+}) => Promise<number>`;
 
 const estimatedTime = 1;
 

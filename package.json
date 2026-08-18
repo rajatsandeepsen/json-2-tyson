@@ -1,7 +1,7 @@
 {
-	"name": "types-schema",
+	"name": "tyson-schema",
 	"description": "Turn your JSON schema into TypeScript code",
-	"version": "0.0.2",
+	"version": "0.0.1",
 	"main": "./dist/index.js",
 	"module": "./dist/index.mjs",
 	"types": "./dist/index.d.ts",
@@ -46,17 +46,26 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/rajatsandeepsen/types-schema.git"
+		"url": "git+https://github.com/rajatsandeepsen/tyson-schema.git"
 	},
 	"bugs": {
-		"url": "https://github.com/rajatsandeepsen/types-schema/issues"
+		"url": "https://github.com/rajatsandeepsen/tyson-schema/issues"
 	},
 	"keywords": [
+		"tyson",
 		"type",
-		"schema",
-		"typeschema",
-		"typescript",
+		"tool",
 		"json",
-		"jsonschema"
+		"schema",
+		"typescript",
+		"tyson-schema",
+		"tool-schema",
+		"json-schema",
+		"tool-calling",
+		"function-calling",
+		"structured-outputs",
+		"ai",
+		"llm",
+		"agent"
 	]
 }
