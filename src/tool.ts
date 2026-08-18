@@ -1,13 +1,13 @@
 import { z } from "zod";
 import { schemaToType } from "./core";
-import { BaseSchemaNodeZod, propertyKeys } from "./type";
+import { BaseSchemaNodeZod, PropertiesZod } from "./type";
 import { fixKey, formatObjectFields, getComment, toTypeName } from "./utils";
 
 const ToolFunctionZod = z.object({
 	name: z.string().default("Tool"),
 	description: z.string().trim().optional(),
 	async: z.boolean().default(false),
-	parameters: z.record(propertyKeys, BaseSchemaNodeZod).default({}),
+	parameters: PropertiesZod.default({}),
 	returns: BaseSchemaNodeZod.optional(),
 	required: z.array(z.string()).default([]),
 	additionalProperties: z.boolean().default(false),
@@ -53,6 +53,7 @@ export function getToolSchema(
 		const keyType = `${key}${optional}`;
 		const valueType = schemaToType(value, {
 			objectStyle: options.paramStyle,
+			comment: options.comment,
 		});
 		return `${keyType}: ${valueType}`;
 	});
@@ -66,8 +67,13 @@ export function getToolSchema(
 		options.paramStyle ?? "inline",
 	);
 
+	const params = fields.length > 0 ? `params: ${parameterType}` : null;
+
 	const baseReturnType = returns
-		? schemaToType(returns, { objectStyle: options.returnStyle })
+		? schemaToType(returns, {
+			objectStyle: options.returnStyle,
+			comment: options.comment,
+		})
 		: "void";
 
 	const returnType =
@@ -77,7 +83,7 @@ export function getToolSchema(
 
 	const comment = options.comment ? getComment(description, "\n") : "";
 
-	const code = `${comment}${exportPrefix} ${name} = (params: ${parameterType}) => ${returnType}`;
+	const code = `${comment}${exportPrefix} ${name} = (${params ?? ""}) => ${returnType}`;
 
 	return {
 		code,

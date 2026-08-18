@@ -24,6 +24,7 @@ export function getTypesSchema(data: JsonSchema, options: Options = {}) {
 
 	const body = schemaToType(schema, {
 		objectStyle: options.objectStyle,
+		comment: options.comment,
 		filterProperty: (k) => k !== "tools",
 	});
 	const declaration = options.declaration ?? "type";

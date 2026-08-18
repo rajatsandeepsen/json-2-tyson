@@ -25,6 +25,8 @@ export const BaseSchemaNodeZod = z.object({
 	allOf: z.array(z.unknown()).optional(),
 });
 
+export const PropertiesZod = z.record(propertyKeys, BaseSchemaNodeZod)
+
 export type JsonValue = z.input<typeof JsonValueZod>;
 
 export type BaseSchemaNode = z.input<typeof BaseSchemaNodeZod>;
