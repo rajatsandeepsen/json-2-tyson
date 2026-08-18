@@ -1,19 +1,17 @@
-import { z } from "zod";
-import { BaseSchemaNodeZod } from "./type";
+import { PropertiesZod, BaseSchemaNodeZod as SchemaNodeZod } from "./type";
 import {
+	addTab,
 	escapePropertyName,
 	formatObjectFields,
+	formatObjectFieldsWithComment,
 	literal,
 	primitiveTypeMap,
 } from "./utils";
 
-const SchemaNodeZod = BaseSchemaNodeZod.extend({
-	properties: z.record(z.string(), z.unknown()).optional(),
-});
-
 export type SchemaToTypeOptions = {
-	objectStyle?: "inline" | "multiline";
+	objectStyle?: "inline" | "multiline" | "comment";
 	filterProperty?: (key: string) => boolean;
+	tabSize?: number;
 };
 
 export { formatObjectFields } from "./utils";
@@ -22,6 +20,7 @@ export function schemaToType(
 	schema: unknown,
 	options: SchemaToTypeOptions = {},
 ) {
+	const tabSize = options.tabSize ?? 1;
 	const objectStyle = options.objectStyle ?? "inline";
 	const filterProperty = options.filterProperty ?? (() => true);
 
@@ -75,14 +74,23 @@ export function schemaToType(
 		}
 
 		if (s.type === "object" || s.properties !== undefined) {
-			const properties = s.properties ?? {};
+			const properties = PropertiesZod.safeParse(s.properties ?? {});
+
+			if (!properties.success) {
+				return "unknown";
+			}
+
 			const required = new Set(s.required);
 
-			const fields = Object.entries(properties)
+			const fields = Object.entries(properties.data)
 				.filter(([key]) => filterProperty(key))
 				.map(([key, value]) => {
 					const optional = required.has(key) ? "" : "?";
-					return `${escapePropertyName(key)}${optional}: ${parse(value)}`;
+					const valueType = addTab(parse(value), tabSize + 1);
+					return {
+						key: `${escapePropertyName(key)}${optional}: ${valueType}`,
+						comment: value.description,
+					};
 				});
 
 			if (s.additionalProperties && s.additionalProperties !== false) {
@@ -90,14 +98,16 @@ export function schemaToType(
 					s.additionalProperties === true
 						? "unknown"
 						: parse(s.additionalProperties);
-				fields.push(`[key: string]: ${valueType}`);
+
+				fields.push({
+					key: `[key: string]: ${valueType}`,
+					comment: undefined,
+				});
 			}
 
-			if (fields.length === 0) {
-				return "{ }";
-			}
-
-			return formatObjectFields(fields, objectStyle);
+			return objectStyle === "comment"
+				? formatObjectFieldsWithComment(fields)
+				: formatObjectFields(fields, objectStyle);
 		}
 
 		if (typeof s.type === "string") {
@@ -107,5 +117,5 @@ export function schemaToType(
 		return "unknown";
 	}
 
-	return parse(schema);
+	return addTab(parse(schema), options.tabSize ?? 1);
 }

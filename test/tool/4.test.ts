@@ -17,7 +17,7 @@ const tool: ToolSchema = {
 	},
 };
 
-const expected = `export type ping = (params: {  }) => Promise<string>`;
+const expected = `export type ping = () => Promise<string>`;
 
 const estimatedTime = 0;
 

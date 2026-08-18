@@ -35,18 +35,18 @@ export function toTypeName(name: string) {
 }
 
 export function formatObjectFields(
-	fields: string[],
+	fields: { key: string }[],
 	objectStyle: "inline" | "multiline",
 ) {
-	if (objectStyle === "multiline") {
-		if (fields.length === 0) return "{ }";
+	if (fields.length === 0) return "{ }";
 
-		const content = fields.map((field) => `  ${field}`).join(",\n");
+	if (objectStyle === "multiline") {
+		const content = fields.map((field) => `  ${field.key}`).join(",\n");
 
 		return `{\n${content}\n}`;
 	}
 
-	return `{ ${fields.join(", ")} }`;
+	return `{ ${fields.map((f) => f.key).join(", ")} }`;
 }
 
 export function formatObjectFieldsWithComment(
@@ -57,7 +57,7 @@ export function formatObjectFieldsWithComment(
 	const content = fields
 		.map((f) => {
 			const post = f.comment ? `, // ${f.comment}` : ",";
-			return `  ${f.key}${post}`;
+			return `${f.key}${post}`;
 		})
 		.join("\n");
 
@@ -68,3 +68,19 @@ export const getComment = (description?: string, post?: string) =>
 	description && description.trim().length > 0
 		? `// ${description}${post ?? ""}`
 		: ``;
+
+export function addTab(input: string, n: number = 1, tab = "  ") {
+	if (n <= 0) return input;
+
+	const tabs = tab.repeat(n);
+	const LastTabs = tab.repeat(n - 1);
+
+	return input
+		.split("\n")
+		.map((part, i, arr) => {
+			if (i === arr.length - 2) return `${part}\n${LastTabs}`;
+			if (i < arr.length - 1) return `${part}\n${tabs}`;
+			return part;
+		})
+		.join("");
+}
