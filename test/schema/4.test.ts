@@ -36,8 +36,6 @@ test("filters reserved tools property from generated schema", () => {
 	console.log(`time: ${diff}ms`);
 	assert.ok(diff <= estimatedTime);
 
-	console.log(out.code);
-
 	assert.equal(out.code, expected);
 	assert.equal(out.declaration, "type");
 	assert.equal(out.name, "agent");

@@ -1,4 +1,5 @@
 import type { getToolSchema } from "./tool";
+import { checkKey } from "./type";
 import { addTab, getComment } from "./utils";
 
 export function getObject(
@@ -12,6 +13,7 @@ export function getObject(
 ) {
 	const list = input
 		.map((item, i, array) => {
+			if (!checkKey(item.name)) throw Error("Wrong variable name");
 			if (options.inline) return item.name;
 
 			if (item.comment && item.comment.trim().length > 0)

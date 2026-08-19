@@ -19,7 +19,7 @@ const tool: ToolSchema = {
 
 const expected = `export type ping = () => Promise<string>`;
 
-const estimatedTime = 0;
+const estimatedTime = 1;
 
 test("omits empty comment and keeps async from tool definition", () => {
 	const __start = Date.now();

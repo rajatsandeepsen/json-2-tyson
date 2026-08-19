@@ -27,7 +27,8 @@ export function getTypesSchema(data: JsonSchema, options: Options = {}) {
 	});
 	const declaration = options.declaration ?? "type";
 	const exportPrefix = options.export ? "export " : "";
-	const canUseInterface = declaration === "interface" && body.startsWith("{");
+	const canUseInterface =
+		declaration === "interface" && body.startsWith("{") && body.endsWith("}");
 
 	const comment =
 		options.objectStyle === "comment" ? getComment(description, "\n") : "";

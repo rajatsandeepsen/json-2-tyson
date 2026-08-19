@@ -68,5 +68,5 @@ test("generates multiline async tool schema with multiline return object", () =>
   currency?: "USD" | "EUR";
 }`,
 	);
-	assert.equal(out.async, false);
+	assert.equal(out.async, true);
 });

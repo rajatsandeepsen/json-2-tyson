@@ -7,11 +7,11 @@ export const JsonValueZod = z.union([
 	z.null(),
 ]);
 
+export const checkKey = (n: string) => /^[A-Za-z_$][A-Za-z0-9_$]*$/.test(n);
+
 export const propertyKeys = z
 	.string()
-	.transform((n) =>
-		/^[A-Za-z_$][A-Za-z0-9_$]*$/.test(n) ? n : JSON.stringify(n),
-	);
+	.transform((n) => (checkKey(n) ? n : JSON.stringify(n)));
 
 export const BaseSchemaNodeZod = z.object({
 	description: z.string().optional(),

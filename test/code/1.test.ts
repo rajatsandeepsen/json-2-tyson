@@ -12,11 +12,11 @@ test("generates inline object from list", () => {
 });
 
 test("generates object from list", () => {
-	const out = getObject("dist", [{ comment: "// hello", name: "action-1" }], {
+	const out = getObject("dist", [{ comment: "// hello", name: "action" }], {
 		export: true,
 	});
 
 	console.log(out);
 
-	assert.equal(out, "export const dist = {\n  hello\n};");
+	assert.equal(out, `export const dist = {\n  action, // hello\n};`);
 });

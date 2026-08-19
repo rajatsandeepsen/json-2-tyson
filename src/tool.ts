@@ -89,8 +89,8 @@ export function getToolSchema(
 		? schemaToType(returns, { objectStyle: rs })
 		: "void";
 
-	const returnType =
-		options.async || async ? `Promise<${baseReturnType}>` : baseReturnType;
+	const isAsync = options.async === undefined ? async : options.async;
+	const returnType = isAsync ? `Promise<${baseReturnType}>` : baseReturnType;
 
 	const exportPrefix = options.export ? "export type" : "type";
 
@@ -101,7 +101,7 @@ export function getToolSchema(
 	return {
 		code,
 		name,
-		async,
+		async: isAsync,
 		parameterType,
 		returnType: baseReturnType,
 		comment: description,
