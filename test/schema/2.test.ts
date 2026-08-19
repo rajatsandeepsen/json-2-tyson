@@ -29,7 +29,7 @@ export interface user_profile {
   "user-id": string,
   age?: number,
   role: "admin" | "user",
-  [key: string]: number
+  [key: string]: number,
 }`;
 
 const estimatedTime = 2;
@@ -38,9 +38,8 @@ test("generates interface schema with escaped keys and index signature", () => {
 	const __start = Date.now();
 	const out = getTypesSchema(schema, {
 		export: true,
-		comment: true,
 		declaration: "interface",
-		objectStyle: "multiline",
+		objectStyle: "comment",
 	});
 	const diff = Date.now() - __start;
 	console.log(`time: ${diff}ms`);

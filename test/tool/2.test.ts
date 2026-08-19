@@ -46,7 +46,7 @@ test("generates inline sync tool schema with additional properties", () => {
 	assert.ok(diff <= estimatedTime);
 
 	assert.equal(out.name, "send_event");
-	assert.equal(out.comment, "// Emit event\n");
+	assert.equal(out.comment, "Emit event");
 	assert.equal(out.code, expected);
 	assert.equal(out.returnType, "void");
 	assert.equal(out.async, false);

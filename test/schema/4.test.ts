@@ -20,8 +20,8 @@ const schema: JsonSchema = {
 };
 
 const expected = `export type agent = {
-  name: string
-}`;
+  name: string,
+};`;
 
 const estimatedTime = 1;
 
@@ -29,13 +29,14 @@ test("filters reserved tools property from generated schema", () => {
 	const __start = Date.now();
 	const out = getTypesSchema(schema, {
 		export: true,
-		comment: false,
 		declaration: "type",
-		objectStyle: "multiline",
+		objectStyle: "comment",
 	});
 	const diff = Date.now() - __start;
 	console.log(`time: ${diff}ms`);
 	assert.ok(diff <= estimatedTime);
+
+	console.log(out.code);
 
 	assert.equal(out.code, expected);
 	assert.equal(out.declaration, "type");

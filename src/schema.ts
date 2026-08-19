@@ -12,9 +12,8 @@ export type JsonSchema = z.input<typeof JsonSchemaZod>;
 type Options = {
 	name?: string;
 	export?: boolean;
-	comment?: boolean;
 	declaration?: "type" | "interface";
-	objectStyle?: "inline" | "multiline";
+	objectStyle?: "inline" | "multiline" | "comment";
 };
 
 export function getTypesSchema(data: JsonSchema, options: Options = {}) {
@@ -24,21 +23,22 @@ export function getTypesSchema(data: JsonSchema, options: Options = {}) {
 
 	const body = schemaToType(schema, {
 		objectStyle: options.objectStyle,
-		comment: options.comment,
 		filterProperty: (k) => k !== "tools",
 	});
 	const declaration = options.declaration ?? "type";
 	const exportPrefix = options.export ? "export " : "";
 	const canUseInterface = declaration === "interface" && body.startsWith("{");
 
-	const comment = options.comment ? getComment(description, "\n") : "";
+	const comment =
+		options.objectStyle === "comment" ? getComment(description, "\n") : "";
 
 	return {
 		name: typeName,
+		comment: description,
 		type: body,
 		declaration: canUseInterface ? ("interface" as const) : ("type" as const),
 		code: canUseInterface
 			? `${comment}${exportPrefix}interface ${typeName} ${body}`
-			: `${comment}${exportPrefix}type ${typeName} = ${body}`,
+			: `${comment}${exportPrefix}type ${typeName} = ${body};`,
 	};
 }

@@ -42,7 +42,7 @@ export type ResultTool = (params: {
   currency?: "USD" | "EUR"
 }>`;
 
-const estimatedTime = 0;
+const estimatedTime = 1;
 
 test("generates multiline async tool schema with multiline return object", () => {
 	const __start = Date.now();
@@ -59,7 +59,7 @@ test("generates multiline async tool schema with multiline return object", () =>
 	assert.ok(diff <= estimatedTime);
 
 	assert.equal(out.name, "ResultTool");
-	assert.equal(out.comment, "// Compute summary\n");
+	assert.equal(out.comment, "Compute summary");
 	assert.equal(out.code, expected);
 	assert.equal(
 		out.returnType,

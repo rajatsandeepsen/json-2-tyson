@@ -14,10 +14,6 @@ export function isObjectLike(value: unknown) {
 	return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
-export function fixKey(name: string) {
-	return name.replaceAll('"', "");
-}
-
 export function escapePropertyName(name: string) {
 	return propertyKeys.parse(name);
 }
@@ -41,7 +37,7 @@ export function formatObjectFields(
 	if (fields.length === 0) return "{ }";
 
 	if (objectStyle === "multiline") {
-		const content = fields.map((field) => `  ${field.key}`).join(",\n");
+		const content = fields.map((field) => `${field.key}`).join(",\n");
 
 		return `{\n${content}\n}`;
 	}

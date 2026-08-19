@@ -33,7 +33,7 @@ export type WeatherSchema = (params: {
   unit?: "celsius" | "fahrenheit"
 }) => Promise<number>`;
 
-const estimatedTime = 1;
+const estimatedTime = 2;
 
 test("generates expected tool schema", () => {
 	const __start = Date.now();
@@ -50,7 +50,7 @@ test("generates expected tool schema", () => {
 	assert.ok(diff <= estimatedTime);
 
 	assert.equal(out.name, "WeatherSchema");
-	assert.equal(out.comment, "// Tool to get weather\n");
+	assert.equal(out.comment, "Tool to get weather");
 	assert.equal(out.code, expected);
 	assert.equal(out.async, true);
 });

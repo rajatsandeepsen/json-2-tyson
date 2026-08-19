@@ -3,7 +3,7 @@ import { schemaToType } from "./core";
 import { BaseSchemaNodeZod, PropertiesZod } from "./type";
 import {
 	addTab,
-	fixKey,
+	escapePropertyName,
 	formatObjectFields,
 	formatObjectFieldsWithComment,
 	getComment,
@@ -57,10 +57,10 @@ export function getToolSchema(
 	const requiredSet = new Set(required);
 
 	const fields = Object.entries(parameters).map(([key, value]) => {
-		const searchKey = fixKey(key);
-		const optional = requiredSet.has(searchKey) ? "" : "?";
+		const newKey = escapePropertyName(key);
+		const optional = requiredSet.has(key) ? "" : "?";
+		const keyType = `${newKey}${optional}`;
 
-		const keyType = `${key}${optional}`;
 		const valueType = schemaToType(value, {
 			objectStyle: options.paramStyle,
 		});
@@ -104,6 +104,6 @@ export function getToolSchema(
 		async,
 		parameterType,
 		returnType: baseReturnType,
-		comment,
+		comment: description,
 	};
 }

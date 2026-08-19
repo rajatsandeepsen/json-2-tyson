@@ -9,11 +9,11 @@ const schema: JsonSchema = {
 	properties: {
 		id: {
 			type: "string",
-			description: "hello",
+			description: "unique id",
 			examples: ["ABC-123"],
 		},
 		name: {
-			description: "hello",
+			description: "first name",
 			type: "string",
 		},
 	},
@@ -22,9 +22,9 @@ const schema: JsonSchema = {
 
 const expected = `// hello
 export type user = {
-  id: string,
-  name?: string
-}`;
+  id: string, // unique id
+  name?: string, // first name
+};`;
 
 const estimatedTime = 10;
 
@@ -32,9 +32,8 @@ test("generates expected type schema", () => {
 	const __start = Date.now();
 	const out = getTypesSchema(schema, {
 		export: true,
-		comment: true,
 		declaration: "type",
-		objectStyle: "multiline",
+		objectStyle: "comment",
 	});
 	const diff = Date.now() - __start;
 	console.log(`time: ${diff}ms`);

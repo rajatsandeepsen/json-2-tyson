@@ -86,7 +86,7 @@ export function schemaToType(
 				.filter(([key]) => filterProperty(key))
 				.map(([key, value]) => {
 					const optional = required.has(key) ? "" : "?";
-					const valueType = addTab(parse(value), tabSize + 1);
+					const valueType = addTab(parse(value), tabSize);
 					return {
 						key: `${escapePropertyName(key)}${optional}: ${valueType}`,
 						comment: value.description,
