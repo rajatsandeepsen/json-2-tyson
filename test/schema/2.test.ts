@@ -26,10 +26,10 @@ const schema: JsonSchema = {
 
 const expected = `// Profile model
 export interface user_profile {
-  "user-id": string,
-  age?: number,
-  role: "admin" | "user",
-  [key: string]: number,
+  "user-id": string;
+  age?: number;
+  role: "admin" | "user";
+  [key: string]: number;
 }`;
 
 const estimatedTime = 2;

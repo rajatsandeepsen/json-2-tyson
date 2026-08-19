@@ -29,8 +29,8 @@ const tool: ToolSchema = {
 
 const expected = `// Tool to get weather
 export type WeatherSchema = (params: {
-  city: string,
-  unit?: "celsius" | "fahrenheit"
+  city: string;
+  unit?: "celsius" | "fahrenheit";
 }) => Promise<number>`;
 
 const estimatedTime = 2;

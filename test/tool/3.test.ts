@@ -36,10 +36,10 @@ const tool: ToolSchema = {
 
 const expected = `// Compute summary
 export type ResultTool = (params: {
-  values: number[]
+  values: number[];
 }) => Promise<{
-  total: number,
-  currency?: "USD" | "EUR"
+  total: number;
+  currency?: "USD" | "EUR";
 }>`;
 
 const estimatedTime = 1;
@@ -64,8 +64,8 @@ test("generates multiline async tool schema with multiline return object", () =>
 	assert.equal(
 		out.returnType,
 		`{
-  total: number,
-  currency?: "USD" | "EUR"
+  total: number;
+  currency?: "USD" | "EUR";
 }`,
 	);
 	assert.equal(out.async, false);

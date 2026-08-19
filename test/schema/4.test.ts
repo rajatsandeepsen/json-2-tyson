@@ -20,7 +20,7 @@ const schema: JsonSchema = {
 };
 
 const expected = `export type agent = {
-  name: string,
+  name: string;
 };`;
 
 const estimatedTime = 1;

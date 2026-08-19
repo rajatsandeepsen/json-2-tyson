@@ -37,7 +37,7 @@ export function formatObjectFields(
 	if (fields.length === 0) return "{ }";
 
 	if (objectStyle === "multiline") {
-		const content = fields.map((field) => `${field.key}`).join(",\n");
+		const content = fields.map((field) => `${field.key};`).join("\n");
 
 		return `{\n${content}\n}`;
 	}
@@ -52,7 +52,7 @@ export function formatObjectFieldsWithComment(
 
 	const content = fields
 		.map((f) => {
-			const post = f.comment ? `, // ${f.comment}` : ",";
+			const post = f.comment ? `; // ${f.comment}` : ";";
 			return `${f.key}${post}`;
 		})
 		.join("\n");

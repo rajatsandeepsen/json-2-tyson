@@ -22,8 +22,8 @@ const schema: JsonSchema = {
 
 const expected = `// hello
 export type user = {
-  id: string, // unique id
-  name?: string, // first name
+  id: string; // unique id
+  name?: string; // first name
 };`;
 
 const estimatedTime = 10;
