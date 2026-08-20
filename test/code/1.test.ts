@@ -12,7 +12,7 @@ test("generates inline object from list", () => {
 });
 
 test("generates object from list", () => {
-	const out = getObject("dist", [{ comment: "// hello", name: "action" }], {
+	const out = getObject("dist", [{ comment: "hello", name: "action" }], {
 		export: true,
 	});
 

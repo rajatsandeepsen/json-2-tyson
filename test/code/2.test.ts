@@ -14,3 +14,35 @@ test("generates inline object with multiple items and no export", () => {
 
 	assert.equal(out, "const items = { alpha, beta };");
 });
+
+test("returns raw object when raw option is true", () => {
+	const out = getObject(
+		"ignored",
+		[
+			{ comment: "first", name: "alpha" },
+			{ comment: "", name: "beta" },
+		],
+		{ raw: true, export: true, comment: "top comment" },
+	);
+
+	assert.equal(
+		out,
+		`{
+alpha, // first
+beta
+}`,
+	);
+});
+
+test("returns inline raw object when raw and inline are true", () => {
+	const out = getObject(
+		"ignored",
+		[
+			{ comment: "first", name: "alpha" },
+			{ comment: "", name: "beta" },
+		],
+		{ raw: true, inline: true, export: true, comment: "top comment" },
+	);
+
+	assert.equal(out, "{ alpha, beta }");
+});
