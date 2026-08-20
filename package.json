@@ -1,5 +1,5 @@
 {
-	"name": "tyson-schema",
+	"name": "json-2-tyson",
 	"description": "Turn your JSON schema into TypeScript code",
 	"version": "0.0.1",
 	"main": "./dist/index.js",
@@ -25,7 +25,9 @@
 			"require": "./dist/index.js"
 		}
 	},
-	"dependencies": {},
+	"dependencies": {
+		"zod": "^4.4.3"
+	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.5.7",
 		"@types/node": "20.17.24",
@@ -33,7 +35,9 @@
 		"tsdown": "^0.15.10",
 		"typescript": "5.6.3"
 	},
-	"peerDependencies": {},
+	"peerDependencies": {
+		"zod": "^4"
+	},
 	"engines": {
 		"node": ">=18"
 	},
@@ -46,10 +50,10 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/rajatsandeepsen/tyson-schema.git"
+		"url": "git+https://github.com/rajatsandeepsen/json-2-tyson.git"
 	},
 	"bugs": {
-		"url": "https://github.com/rajatsandeepsen/tyson-schema/issues"
+		"url": "https://github.com/rajatsandeepsen/json-2-tyson/issues"
 	},
 	"keywords": [
 		"tyson",

@@ -1,8 +1,8 @@
-<a href="https://github.com/rajatsandeepsen/tyson-schema">
-    <img alt="cover" src="https://github.com/rajatsandeepsen/tyson-schema/blob/main/cover.png?raw=true" />
+<a href="https://github.com/rajatsandeepsen/json-2-tyson">
+    <img alt="cover" src="https://github.com/rajatsandeepsen/json-2-tyson/blob/main/cover.png?raw=true" />
 </a>
 
-# Tyson-Schema
+# json-2-tyson
 
 Turn your JSON schema into TypeScript code.
 
@@ -21,13 +21,13 @@ Turn your JSON schema into TypeScript code.
 You can install the package using npm, bun, nubs or pnpm
 
 ```bash
-npm i tyson-schema
+npm i json-2-tyson
 ```
 
 ### Schema
 
 ```ts
-import { getTypesSchema } from "tyson-schema"
+import { getTypesSchema } from "json-2-tyson"
 
 const schema = {
 	title: "user",
@@ -61,7 +61,7 @@ export type User = {
 ### Tools
 
 ```ts
-import { getToolSchema } from "tyson-schema"
+import { getToolSchema } from "json-2-tyson"
 
 const tool = {
 	type: "function",

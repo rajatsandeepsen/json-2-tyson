@@ -24,7 +24,7 @@
 		"target": "ES2021",
 		"stripInternal": true,
 		"paths": {
-			"tyson-schema": ["./src/index"]
+			"json-2-tyson": ["./src/index"]
 		}
 	},
 	"include": ["."],

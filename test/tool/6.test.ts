@@ -1,6 +1,6 @@
 import { strict as assert } from "node:assert";
 import test from "node:test";
-import { getToolSchema, type ToolSchema } from "tyson-schema";
+import { getToolSchema, type ToolSchema } from "json-2-tyson";
 
 const tool: ToolSchema = {
 	type: "function",

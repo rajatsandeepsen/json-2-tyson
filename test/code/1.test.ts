@@ -1,6 +1,6 @@
 import { strict as assert } from "node:assert";
 import test from "node:test";
-import { getObject } from "tyson-schema";
+import { getObject } from "json-2-tyson";
 
 test("generates inline object from list", () => {
 	const out = getObject("dist", [{ comment: "", name: "hello" }], {

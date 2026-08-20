@@ -1,6 +1,6 @@
 import { strict as assert } from "node:assert";
 import test from "node:test";
-import { getTypesSchema, type JsonSchema } from "tyson-schema";
+import { getTypesSchema, type JsonSchema } from "json-2-tyson";
 
 const schema: JsonSchema = {
 	title: "1bad-name",

@@ -1,6 +1,6 @@
 import { strict as assert } from "node:assert";
 import test from "node:test";
-import { getArray } from "tyson-schema";
+import { getArray } from "json-2-tyson";
 
 test("generates inline array from list", () => {
 	const out = getArray(
