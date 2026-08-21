@@ -9,26 +9,31 @@ const tool: ToolSchema = {
 		description: "Create report",
 		async: true,
 		parameters: {
-			projectId: {
-				type: "string",
-			},
-			filters: {
-				type: "object",
-				properties: {
-					from: {
-						type: "string",
-					},
-					to: {
-						type: "string",
-					},
-					tags: {
-						type: "array",
-						items: {
+			type: "object",
+			properties: {
+				projectId: {
+					type: "string",
+				},
+				filters: {
+					type: "object",
+					properties: {
+						from: {
 							type: "string",
+						},
+						to: {
+							type: "string",
+						},
+						tags: {
+							type: "array",
+							items: {
+								type: "string",
+							},
 						},
 					},
 				},
 			},
+			required: ["projectId"],
+			additionalProperties: false,
 		},
 		returns: {
 			type: "object",
@@ -43,8 +48,6 @@ const tool: ToolSchema = {
 			},
 			required: ["id"],
 		},
-		required: ["projectId"],
-		additionalProperties: false,
 	},
 };
 

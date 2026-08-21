@@ -9,12 +9,17 @@ const tool: ToolSchema = {
 		description: "  Compute summary  ",
 		async: false,
 		parameters: {
-			values: {
-				type: "array",
-				items: {
-					type: "number",
+			type: "object",
+			properties: {
+				values: {
+					type: "array",
+					items: {
+						type: "number",
+					},
 				},
 			},
+			required: ["values"],
+			additionalProperties: false,
 		},
 		returns: {
 			type: "object",
@@ -29,8 +34,6 @@ const tool: ToolSchema = {
 			},
 			required: ["total"],
 		},
-		required: ["values"],
-		additionalProperties: false,
 	},
 };
 

@@ -9,17 +9,20 @@ const tool: ToolSchema = {
 		description: "Set user",
 		async: false,
 		parameters: {
-			id: {
-				type: "string",
-				description: "user id",
+			type: "object",
+			properties: {
+				id: {
+					type: "string",
+					description: "user id",
+				},
+				active: {
+					type: "boolean",
+					description: "is active",
+				},
 			},
-			active: {
-				type: "boolean",
-				description: "is active",
-			},
+			required: ["id"],
+			additionalProperties: false,
 		},
-		required: ["id"],
-		additionalProperties: false,
 	},
 };
 

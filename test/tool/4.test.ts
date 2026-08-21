@@ -8,12 +8,9 @@ const tool: ToolSchema = {
 		name: "ping",
 		description: "   ",
 		async: true,
-		parameters: {},
 		returns: {
 			type: "string",
 		},
-		required: [],
-		additionalProperties: false,
 	},
 };
 

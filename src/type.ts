@@ -14,6 +14,7 @@ export const propertyKeys = z
 	.transform((n) => (checkKey(n) ? n : JSON.stringify(n)));
 
 export const BaseSchemaNodeZod = z.object({
+	title: z.string().optional(),
 	description: z.string().optional(),
 	type: z.union([z.string(), z.array(z.string())]),
 	required: z.array(z.string()).default([]),

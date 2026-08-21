@@ -9,21 +9,24 @@ const tool: ToolSchema = {
 		description: "Tool to get weather",
 		async: true,
 		parameters: {
-			city: {
-				description: "Tool to get weather",
-				type: "string",
+			type: "object",
+			properties: {
+				city: {
+					description: "Tool to get weather",
+					type: "string",
+				},
+				unit: {
+					description: "Tool to get weather",
+					type: "string",
+					enum: ["celsius", "fahrenheit"],
+				},
 			},
-			unit: {
-				description: "Tool to get weather",
-				type: "string",
-				enum: ["celsius", "fahrenheit"],
-			},
+			required: ["city"],
+			additionalProperties: false,
 		},
 		returns: {
 			type: "number",
 		},
-		required: ["city"],
-		additionalProperties: false,
 	},
 };
 

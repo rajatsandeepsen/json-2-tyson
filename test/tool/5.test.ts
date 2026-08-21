@@ -9,15 +9,18 @@ const tool: ToolSchema = {
 		description: "Fetch data",
 		async: true,
 		parameters: {
-			url: {
-				type: "string",
+			type: "object",
+			properties: {
+				url: {
+					type: "string",
+				},
 			},
+			required: ["url"],
+			additionalProperties: false,
 		},
 		returns: {
 			type: "string",
 		},
-		required: ["url"],
-		additionalProperties: false,
 	},
 };
 

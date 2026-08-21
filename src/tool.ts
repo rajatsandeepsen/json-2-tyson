@@ -1,23 +1,14 @@
 import { z } from "zod";
 import { schemaToType } from "./core";
-import { BaseSchemaNodeZod, PropertiesZod } from "./type";
-import {
-	addTab,
-	escapePropertyName,
-	formatObjectFields,
-	formatObjectFieldsWithComment,
-	getComment,
-	toTypeName,
-} from "./utils";
+import { BaseSchemaNodeZod } from "./type";
+import { getComment, toTypeName } from "./utils";
 
 const ToolFunctionZod = z.object({
 	name: z.string().default("Tool"),
 	description: z.string().trim().optional(),
 	async: z.boolean().default(false),
-	parameters: PropertiesZod.default({}),
+	parameters: BaseSchemaNodeZod.optional(),
 	returns: BaseSchemaNodeZod.optional(),
-	required: z.array(z.string()).default([]),
-	additionalProperties: z.boolean().default(false),
 });
 
 const ToolSchemaZod = z.object({
@@ -39,51 +30,19 @@ export function getToolSchema(
 	} = {},
 ) {
 	const {
-		function: {
-			name: defaultName,
-			parameters,
-			async,
-			returns,
-			description,
-			additionalProperties,
-			required,
-		},
+		function: { name: defaultName, parameters, async, returns, description },
 	} = ToolSchemaZod.parse(input);
 
 	const ps = options.paramStyle ?? "inline";
 	const rs = options.returnStyle ?? "inline";
 
 	const name = toTypeName(options.name ?? defaultName);
-	const requiredSet = new Set(required);
 
-	const fields = Object.entries(parameters).map(([key, value]) => {
-		const newKey = escapePropertyName(key);
-		const optional = requiredSet.has(key) ? "" : "?";
-		const keyType = `${newKey}${optional}`;
+	const baseParamType = parameters
+		? schemaToType(parameters, { objectStyle: ps })
+		: null;
 
-		const valueType = schemaToType(value, {
-			objectStyle: options.paramStyle,
-		});
-
-		return {
-			key: `${keyType}: ${valueType}`,
-			comment: value.description,
-		};
-	});
-
-	if (additionalProperties) {
-		fields.push({ key: `[key: string]: unknown`, comment: undefined });
-	}
-
-	const parameterType =
-		ps === "comment"
-			? formatObjectFieldsWithComment(fields)
-			: formatObjectFields(fields, ps);
-
-	const params =
-		fields.length > 0
-			? `params: ${ps === "inline" ? parameterType : addTab(parameterType)}`
-			: null;
+	const params = baseParamType ? `params: ${baseParamType}` : null;
 
 	const baseReturnType = returns
 		? schemaToType(returns, { objectStyle: rs })
@@ -102,7 +61,7 @@ export function getToolSchema(
 		code,
 		name,
 		async: isAsync,
-		parameterType,
+		parameterType: baseParamType,
 		returnType: baseReturnType,
 		comment: description,
 	};

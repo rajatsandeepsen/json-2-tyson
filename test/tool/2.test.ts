@@ -9,21 +9,24 @@ const tool: ToolSchema = {
 		description: "Emit event",
 		async: false,
 		parameters: {
-			"event-name": {
-				type: "string",
-			},
-			payload: {
-				type: "object",
-				properties: {
-					count: {
-						type: "number",
-					},
+			type: "object",
+			properties: {
+				"event-name": {
+					type: "string",
 				},
-				required: ["count"],
+				payload: {
+					type: "object",
+					properties: {
+						count: {
+							type: "number",
+						},
+					},
+					required: ["count"],
+				},
 			},
+			required: ["event-name"],
+			additionalProperties: true,
 		},
-		required: ["event-name"],
-		additionalProperties: true,
 	},
 };
 

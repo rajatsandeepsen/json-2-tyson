@@ -8,9 +8,6 @@ const tool: ToolSchema = {
 		name: "heartbeat",
 		description: "Heartbeat",
 		async: false,
-		parameters: {},
-		required: [],
-		additionalProperties: false,
 	},
 };
 

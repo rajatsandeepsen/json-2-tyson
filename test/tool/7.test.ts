@@ -9,20 +9,23 @@ const tool: ToolSchema = {
 		description: "Dispatch event",
 		async: false,
 		parameters: {
-			"event-name": {
-				type: "string",
-			},
-			meta: {
-				type: "object",
-				properties: {
-					"source-id": {
-						type: "string",
+			type: "object",
+			properties: {
+				"event-name": {
+					type: "string",
+				},
+				meta: {
+					type: "object",
+					properties: {
+						"source-id": {
+							type: "string",
+						},
 					},
 				},
 			},
+			required: ["event-name"],
+			additionalProperties: true,
 		},
-		required: ["event-name"],
-		additionalProperties: true,
 		returns: {
 			type: "boolean",
 		},
