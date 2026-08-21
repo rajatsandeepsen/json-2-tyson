@@ -1,11 +1,16 @@
-import type { getToolSchema } from "./tool";
 import { checkKey } from "./type";
 import { addTab, getComment } from "./utils";
 
+type Input = {
+	name: string;
+	comment?: string;
+}[];
+
 export function getObject(
 	name: string,
-	input: Pick<ReturnType<typeof getToolSchema>, "name" | "comment">[],
+	input: Input,
 	options: {
+		declare?: string;
 		comment?: string;
 		export?: boolean;
 		inline?: boolean;
@@ -34,16 +39,26 @@ export function getObject(
 
 	if (options.raw) return listCode;
 
-	const exportPrefix = options.export ? "export const" : "const";
 	const comment = options.comment ? getComment(options.comment, "\n") : "";
+
+	if (options.declare) {
+		const exportPrefix = options.export
+			? "export declare const"
+			: "declare const";
+		const code = `${comment}${exportPrefix} ${name}: ${addTab(listCode)};`;
+		return code;
+	}
+
+	const exportPrefix = options.export ? "export const" : "const";
 	const code = `${comment}${exportPrefix} ${name} = ${addTab(listCode)};`;
 	return code;
 }
 
 export function getArray(
 	name: string,
-	input: Pick<ReturnType<typeof getToolSchema>, "name" | "comment">[],
+	input: Input,
 	options: {
+		declare?: boolean;
 		comment?: string;
 		export?: boolean;
 		inline?: boolean;
@@ -72,8 +87,38 @@ export function getArray(
 
 	if (options.raw) return listCode;
 
-	const exportPrefix = options.export ? "export const" : "const";
 	const comment = options.comment ? getComment(options.comment, "\n") : "";
+
+	if (options.declare) {
+		const exportPrefix = options.export
+			? "export declare const"
+			: "declare const";
+		const code = `${comment}${exportPrefix} ${name}: ${addTab(listCode)};`;
+		return code;
+	}
+
+	const exportPrefix = options.export ? "export const" : "const";
 	const code = `${comment}${exportPrefix} ${name} = ${addTab(listCode)};`;
+	return code;
+}
+
+export function getDeclare(
+	name: string,
+	input: string,
+	options: {
+		declare?: boolean;
+		comment?: string;
+		export?: boolean;
+		inline?: boolean;
+		raw?: boolean;
+	},
+) {
+	const comment = options.comment ? getComment(options.comment, "\n") : "";
+
+	const exportPrefix = options.export
+		? "export declare const"
+		: "declare const";
+
+	const code = `${comment}${exportPrefix} ${name}: ${addTab(input)};`;
 	return code;
 }

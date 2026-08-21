@@ -27,20 +27,23 @@ npm i json-2-tyson
 ### Schema
 
 ```ts
-import { getTypesSchema } from "json-2-tyson"
+import { getTypesSchema } from "json-2-tyson";
 
 const schema = {
 	title: "user",
 	type: "object",
 	properties: {
-		id: {
-			type: "string",
+		type: "object",
+		properties: {
+			id: {
+				type: "string",
+			},
+			name: {
+				type: "string",
+			},
 		},
-		name: {
-			type: "string",
-		},
+		required: ["id"],
 	},
-	required: ["id"],
 };
 
 const out = getTypesSchema(schema, {
@@ -61,7 +64,7 @@ export type User = {
 ### Tools
 
 ```ts
-import { getToolSchema } from "json-2-tyson"
+import { getToolSchema } from "json-2-tyson";
 
 const tool = {
 	type: "function",
@@ -70,19 +73,22 @@ const tool = {
 		description: "get weather",
 		async: true,
 		parameters: {
-			city: {
-				type: "string",
+			type: "object",
+			properties: {
+				city: {
+					type: "string",
+				},
+				unit: {
+					type: "string",
+					enum: ["celsius", "fahrenheit"],
+				},
 			},
-			unit: {
-				type: "string",
-				enum: ["celsius", "fahrenheit"],
-			},
+			required: ["city"],
+			additionalProperties: false,
 		},
 		returns: {
 			type: "number",
 		},
-		required: ["city"],
-		additionalProperties: false,
 	},
 };
 
