@@ -8,7 +8,10 @@ test("generates declared object with export", () => {
 		declare: "object",
 	});
 
-	assert.equal(out, `export declare const dist: {\n  action, // hello\n};`);
+	assert.equal(
+		out,
+		`export declare const dist: {\n  action: action, // hello\n};`,
+	);
 });
 
 test("generates declared inline array without export", () => {
@@ -17,7 +20,7 @@ test("generates declared inline array without export", () => {
 		declare: true,
 	});
 
-	assert.equal(out, "declare const items: [ alpha, beta ];");
+	assert.equal(out, "declare const items: [ alpha: alpha, beta: beta ];");
 });
 
 test("generates declared array with top-level comment", () => {
@@ -29,6 +32,6 @@ test("generates declared array with top-level comment", () => {
 
 	assert.equal(
 		out,
-		`// declared list\nexport declare const dist: [\n  action\n];`,
+		`// declared list\nexport declare const dist: [\n  action: action\n];`,
 	);
 });

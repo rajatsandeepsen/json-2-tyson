@@ -20,14 +20,16 @@ export function getObject(
 	const list = input
 		.map((item, i, array) => {
 			if (!checkKey(item.name)) throw Error("Wrong variable name");
-			if (options.inline) return item.name;
+			const keyPrefix = options.declare ? `${item.name}: ` : "";
+
+			if (options.inline) return `${keyPrefix}${item.name}`;
 
 			if (item.comment && item.comment.trim().length > 0)
-				return `${item.name}, ${getComment(item.comment)}`;
+				return `${keyPrefix}${item.name}, ${getComment(item.comment)}`;
 
-			if (i === array.length - 1) return item.name;
+			if (i === array.length - 1) return `${keyPrefix}${item.name}`;
 
-			return `${item.name},`;
+			return `${keyPrefix}${item.name},`;
 		})
 		.join(options.inline ? ", " : "\n");
 
@@ -68,14 +70,17 @@ export function getArray(
 	const list = input
 		.map((item, i, array) => {
 			if (!checkKey(item.name)) throw Error("Wrong variable name");
-			if (options.inline) return item.name;
+
+			const keyPrefix = options.declare ? `${item.name}: ` : "";
+
+			if (options.inline) return `${keyPrefix}${item.name}`;
 
 			if (item.comment && item.comment.trim().length > 0)
-				return `${item.name}, ${getComment(item.comment)}`;
+				return `${keyPrefix}${item.name}, ${getComment(item.comment)}`;
 
-			if (i === array.length - 1) return item.name;
+			if (i === array.length - 1) return `${keyPrefix}${item.name}`;
 
-			return `${item.name},`;
+			return `${keyPrefix}${item.name},`;
 		})
 		.join(options.inline ? ", " : "\n");
 
